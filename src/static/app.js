@@ -21,13 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
-        const participantsList = details.participants.length
-          ? `<ul>${details.participants.map((participant) => `
-              <li>
-                <span class="participant-name">${participant}</span>
-                <button type="button" class="remove-participant" data-activity="${encodeURIComponent(name)}" data-email="${encodeURIComponent(participant)}" aria-label="Remove ${participant}">✕</button>
-              </li>`).join("")}</ul>`
-          : `<p class="no-participants">No participants yet.</p>`;
+              const participantsList = details.participants.length > 0
+          ? details.participants.map(p => `<li><span class="participant-email">${p}</span><button class="delete-btn" data-activity="${name}" data-email="${p}" aria-label="Remove ${p}">✕</button></li>`).join('')
+          : '<li><em>No participants yet</em></li>';
+        
+          
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
@@ -131,6 +129,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+   // Handle delete participant button clicks
+  activitiesList.addEventListener("click", async (event) => {
+    if (event.target.classList.contains("delete-btn")) {
+      const activity = event.target.dataset.activity;
+      const email = event.target.dataset.email;
+
+      if (confirm(`Are you sure you want to remove ${email}?`)) {
+        try {
+          const response = await fetch(
+            `/activities/${encodeURIComponent(activity)}/unregister?email=${encodeURIComponent(email)}`,
+            {
+              method: "POST",
+            }
+          );
+
+          if (response.ok) {
+            fetchActivities();
+          } else {
+            const result = await response.json();
+            alert(result.detail || "Failed to remove participant");
+          }
+        } catch (error) {
+          alert("Failed to remove participant. Please try again.");
+          console.error("Error removing participant:", error);
+        }
+      }
+    }
+  });
   // Initialize app
   fetchActivities();
 });
