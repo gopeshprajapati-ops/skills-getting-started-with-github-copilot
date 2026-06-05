@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
               if (response.ok) {
                 messageDiv.textContent = result.message;
                 messageDiv.className = "success";
+                signupForm.reset();
                 fetchActivities();
               } else {
                 messageDiv.textContent = result.detail || "Unable to remove participant.";
