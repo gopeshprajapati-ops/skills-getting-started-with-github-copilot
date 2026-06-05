@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+// ci: retrigger after workflow fixes
 // CI: trigger Step 3 workflow
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
