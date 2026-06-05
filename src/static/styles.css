@@ -81,7 +81,7 @@ section h3 {
 }
 
 .activity-card ul {
-  list-style: none;
+  list-style: disc inside;
   margin: 8px 0 0;
   padding: 0;
 }
